@@ -133,4 +133,18 @@ class PostController extends Controller
             ->getForm()
         ;
     }
+
+    public function myPostAction($userName)
+  {
+    // On recherche l'utilisateur dans la table User
+    $user = $this->getDoctrine()
+      ->getRepository('BlogBundle:User')
+      ->findOneByusername($userName);
+      $user_id = $user->getId();
+    // On recherche l'id utilisateur à partir de l'ID trouvé haut dessus, et on renvois les posts
+    $post = $this->getDoctrine()
+      ->getRepository('BlogBundle:Post')
+      ->findByuser(array("user_id"=> $user_id), array("id"=>"desc"));
+  return $this->render('BlogBundle:Default:index.html.twig', array("user"=>$user, "post"=>$post));
+  }
 }
